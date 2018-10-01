@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using System.Net.Http.Headers;
-using System.Web.Http.Cors;
 using Newtonsoft.Json.Serialization;
 
 namespace intefax_test

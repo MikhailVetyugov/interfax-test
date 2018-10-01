@@ -2,3 +2,4 @@ packages
 bin
 obj
 .vs
+intefax-test.csproj

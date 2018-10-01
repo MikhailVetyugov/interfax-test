@@ -24,8 +24,11 @@ namespace intefax_test
         protected void Application_EndRequest()
         {
 #if DEBUG
-            Response.AddHeader("Access-Control-Allow-Origin", "*");
-            Response.End();
+            if (Request.Path.StartsWith("/api/"))
+            {
+                Response.AddHeader("Access-Control-Allow-Origin", "*");
+                Response.End();
+            }
 #endif
         }
     }
