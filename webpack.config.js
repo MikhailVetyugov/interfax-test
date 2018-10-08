@@ -1,6 +1,6 @@
 const path = require('path');
 
-const DEV_API_URL = 'http://localhost:51473';
+const DEV_API_URL = 'http://localhost:8081';
 
 module.exports = {
   entry: ['babel-polyfill', './src/index.jsx'],

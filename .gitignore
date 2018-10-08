@@ -1,5 +1,1 @@
-packages
-bin
-obj
-.vs
-intefax-test.csproj
+node_modules
