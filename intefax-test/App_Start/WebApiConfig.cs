@@ -26,10 +26,6 @@ namespace intefax_test
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
-
-#if DEBUG
-            config.EnableCors();
-#endif
         }
     }
 }

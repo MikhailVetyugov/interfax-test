@@ -3,7 +3,6 @@ using System.Web.Http;
 using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Http.Cors;
 using Newtonsoft.Json;
 using intefax_test.Models;
 

@@ -34,10 +34,8 @@ module.exports = {
   },
   devServer: {
     contentBase: './dist',
-    setup(app) {
-      app.get('/api/*', (req, res) => {
-        res.redirect(`${DEV_API_URL}${req.originalUrl}`);
-      });
+    proxy: {
+      '/api': DEV_API_URL
     }
   }
 };

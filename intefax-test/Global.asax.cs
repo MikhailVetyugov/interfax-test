@@ -8,28 +8,5 @@ namespace intefax_test
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
-
-        protected void Application_BeginRequest()
-        {
-#if DEBUG
-            if (Request.HttpMethod == "OPTIONS")
-            {
-                Response.AddHeader("Access-Control-Allow-Headers", "*");
-                Response.AddHeader("Access-Control-Allow-Methods", "GET");
-                Response.End();
-            }
-#endif
-        }
-
-        protected void Application_EndRequest()
-        {
-#if DEBUG
-            if (Request.Path.StartsWith("/api/"))
-            {
-                Response.AddHeader("Access-Control-Allow-Origin", "*");
-                Response.End();
-            }
-#endif
-        }
     }
 }
