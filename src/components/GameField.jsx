@@ -37,7 +37,7 @@ class GameField extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { rows, isGameFinished, hasErrors } = state.gameReducer;
+  const { rows, isGameFinished, hasErrors } = state.game;
   return { rows, isGameFinished, hasErrors };
 }
 

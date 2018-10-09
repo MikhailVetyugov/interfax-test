@@ -16,7 +16,7 @@ class Row extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const cells = state.gameReducer.rows.find((row, i) => i === ownProps.rowIndex);
+  const cells = state.game.rows.find((row, i) => i === ownProps.rowIndex);
   return { cells };
 }
 

@@ -1,59 +1,78 @@
 import * as actions from 'actions/game-actions';
 
-const initialState = initializeState();
+const initialState = {
+  loading: true
+};
 
-export default function gameReducer(state = initialState, action) {
+export default function game(state = initialState, action) {
   switch (action.type) {
     case actions.SELECT_CELL:
-      const newState = Object.assign({}, state);
-
-      newState.rows.forEach((rowCells, i) => {
-        rowCells.forEach((cell, j) => {
-          cell.selected = !cell.initialValue && action.rowIndex === i && action.cellIndex === j;
-        })
-      });
-
-      return newState;
+      return {
+        ...state,
+        rows: rows(state.rows, action)
+      };
     case actions.CHANGE_CELL:
     case actions.OPEN_CELL:
-      if (!action.key || /^[1-9]$/.test(action.key)) {
-        const newState = Object.assign({}, state);
-        setValueInSelectedCell(newState.rows, action.key);
-        newState.isGameFinished = isEveryCellFilledCorrectly(newState.rows);
-        return newState;
-      }
-
-      return state;
+      return {
+        ...state,
+        rows: rows(state.rows, action),
+        isGameFinished: isEveryCellFilledCorrectly(state.rows)
+      };
     case actions.CHECK_CELL:
-      return Object.assign({}, state, { hasErrors: hasErrors(state.rows) });
+      return {
+        ...state,
+        hasErrors: hasErrors(state.rows)
+      };
     case actions.SET_VARIANT:
-      return Object.assign({}, state, initializeVariant(action.variant));
+      return {
+        ...state,
+        isGameFinished: false,
+        hasErrors: false,
+        loading: false,
+        rows: rows(state.rows, action)
+      };
     case actions.LOAD_VARIANT:
-      return Object.assign({}, state, { loading: true });
+      return {
+        ...state,
+        loading: true
+      };
     default:
       return state;
   }
 }
 
-function initializeState() {
-  return {
-    loading: true
-  };
-}
+export function rows(state = [], action) {
+  switch (action.type) {
+    case actions.SELECT_CELL:
+      const rows = [...state];
 
-function initializeVariant(variant) {
-  return {
-    isGameFinished: false,
-    hasErrors: false,
-    loading: false,
-    rows: variant.solution
-      .map((row, i) => row.map((cell, j) => ({
-        initialValue: variant.openedCells[i][j],
-        solutionValue: cell,
-        userValue: null,
-        selected: false
-      })))
-  };
+      rows.forEach((rowCells, i) => {
+        rowCells.forEach((cell, j) => {
+          cell.selected = !cell.initialValue && action.rowIndex === i && action.cellIndex === j;
+        });
+      });
+
+      return rows;
+    case actions.CHANGE_CELL:
+    case actions.OPEN_CELL:
+      if (!action.key || /^[1-9]$/.test(action.key)) {
+        const rows = [...state];
+        setValueInSelectedCell(rows, action.key);
+        return rows;
+      }
+
+      return state;
+    case actions.SET_VARIANT:
+      return action.variant.solution
+        .map((row, i) => row.map((cell, j) => ({
+          initialValue: action.variant.openedCells[i][j],
+          solutionValue: cell,
+          userValue: null,
+          selected: false
+        })));
+    default:
+      return state;
+  }
 }
 
 function setValueInSelectedCell(rows, value = null) {

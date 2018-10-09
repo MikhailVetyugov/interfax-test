@@ -56,7 +56,7 @@ export class Popup extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const opened = state.popupReducer.opened;
+  const opened = state.popup.opened;
   return { opened };
 }
 

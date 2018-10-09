@@ -12,8 +12,8 @@ import App from 'components/App';
 const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
-  gameReducer,
-  popupReducer
+  game: gameReducer,
+  popup: popupReducer
 });
 
 const store = createStore(

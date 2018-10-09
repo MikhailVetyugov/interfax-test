@@ -49,7 +49,7 @@ class Cell extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const cell = state.gameReducer.rows
+  const cell = state.game.rows
     .find((row, i) => i === ownProps.rowIndex)
     .find((cell, j) => j === ownProps.cellIndex);
   return {

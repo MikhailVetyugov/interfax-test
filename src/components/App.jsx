@@ -20,7 +20,7 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const loading = state.gameReducer.loading;
+  const loading = state.game.loading;
   return {
     loading
   };
