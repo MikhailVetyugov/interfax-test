@@ -83,7 +83,7 @@ export function rows(state = [], action) {
   }
 }
 
-export function row(state, action) {
+export function row(state = [], action) {
   switch (action.type) {
     case actions.OPEN_CELL:
     case actions.CHANGE_CELL:
@@ -103,7 +103,7 @@ export function row(state, action) {
   }
 }
 
-export function cell(state, action) {
+export function cell(state = {}, action) {
   switch (action.type) {
     case actions.OPEN_CELL:
       return {
