@@ -56,9 +56,17 @@ export function rows(state = [], action) {
     case actions.CHANGE_CELL:
     case actions.OPEN_CELL:
       if (!action.key || /^[1-9]$/.test(action.key)) {
-        const rows = [...state];
-        setValueInSelectedCell(rows, action.key);
-        return rows;
+        const rowIndex = findCurrentRowIndex(state);
+
+        if (rowIndex === -1) {
+          return state;
+        }
+
+        return [
+          ...state.slice(0, rowIndex),
+          row(state[rowIndex], action),
+          ...state.slice(rowIndex + 1)
+        ];
       }
 
       return state;
@@ -75,32 +83,62 @@ export function rows(state = [], action) {
   }
 }
 
-function setValueInSelectedCell(rows, value = null) {
-  for (const rowCells of rows) {
-    const cell = rowCells.find(cell => cell.selected && !cell.initialValue);
-    if (!cell) continue;
+export function row(state, action) {
+  switch (action.type) {
+    case actions.OPEN_CELL:
+    case actions.CHANGE_CELL:
+      const currentCellIndex = state.findIndex(cell => cell.selected && !cell.initialValue);
 
-    if (value) {
-      cell.userValue = +value;
-    } else if (value === '') {
-      cell.userValue = value;
-    } else {
-      cell.initialValue = cell.solutionValue;
-      cell.userValue = null;
-    }
+      if (currentCellIndex === -1) {
+        return state;
+      }
 
-    return;
+      return [
+        ...state.slice(0, currentCellIndex),
+        cell(state[currentCellIndex], action),
+        ...state.slice(currentCellIndex + 1)
+      ];
+    default:
+      return state;
   }
 }
 
+export function cell(state, action) {
+  switch (action.type) {
+    case actions.OPEN_CELL:
+      return {
+        ...state,
+        userValue: null,
+        initialValue: state.solutionValue
+      };
+    case actions.CHANGE_CELL:
+      if (action.key) {
+        return {...state, userValue: +action.key };
+      }
+
+      if (action.key === '') {
+        return {...state, userValue: action.key };
+      }
+    default:
+      return state;
+  }
+}
+
+function findCurrentRowIndex(rows) {
+  return rows.findIndex(cells => {
+    const cellIndex = cells.findIndex(cell => cell.selected && !cell.initialValue);
+    return cellIndex > -1;
+  })
+}
+
 function isEveryCellFilledCorrectly(rows) {
-  return rows.every(rowCells => {
-    return rowCells.every(cell => cell.initialValue || cell.userValue === cell.solutionValue);
+  return rows.every(row => {
+    return row.every(cell => cell.initialValue || cell.userValue === cell.solutionValue);
   });
 }
 
 function hasErrors(rows) {
-  return rows.some(rowCells => {
-    return rowCells.some(cell => cell.userValue && cell.userValue !== cell.solutionValue);
+  return rows.some(row => {
+    return row.some(cell => cell.userValue && cell.userValue !== cell.solutionValue);
   });
 }
